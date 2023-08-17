@@ -1,4 +1,5 @@
 import time
+import pyperclip
 
 # import selenium
 from selenium import webdriver # webdriver를 이용해 해당 브라우저를 열기 위해
@@ -33,7 +34,8 @@ Parse = BeautifulSoup(index, 'html.parser')
 
 # Using the select method
 # Prints the second element from the li tag
-ol = Parse.find('ol', start=(today - bDay).days, type="1")
+number = (today - bDay).days
+ol = Parse.find('ol', start=number, type="1")
 
 lis = ol.find_all('li')
 
@@ -41,67 +43,88 @@ titleText = lis[1].text
 contentText = lis[2].text
 refText = lis[3].text
 
-
-contentText = contentText + "\n" + " - " + refText
+finalTitle = f'[하루 1페이지] 니체의 말 #{number}'
+finalContents = f'''
+■ {titleText}
+\n
+{contentText}
+\n
+- {refText}
+'''
 
 h1 = Parse.find('h1')
-print('제목 : ' + titleText)
-print('내용 : ' + contentText)
+
 referece = Parse.find('p', id="75f587b1-2d3f-4705-af73-e9c2c477ab9f")
 refereceText = "출처 : 니체, \"" + h1.text + "\", " + referece.text
 
-print(refereceText)
+print(finalContents)
 
 
-#URL = "https://chimhaha.net"
-try:
-    dr = webdriver.Chrome("C:/ZTOA/Util/chromedriver-win64/chromedriver-win64/chromedriver.exe")
-    dr.get(URL)
+URL = "https://chimhaha.net"
+#try:
+dr = webdriver.Chrome("C:/ZTOA/Util/chromedriver-win64/chromedriver-win64/chromedriver.exe")
+dr.get(URL)
 
-    time.sleep(3)
+time.sleep(3)
 
-    login = dr.find_element(By.XPATH, "/html/body/header/section[1]/ul/li[2]/a")
-    login.click()
+login = dr.find_element(By.XPATH, "/html/body/header/section[1]/ul/li[2]/a")
+login.click()
 
-    time.sleep(3)
+time.sleep(3)
 
-    naverLogin = dr.find_element(By.XPATH, "/html/body/main/div/form/section/a")
-    naverLogin.click()
+naverLogin = dr.find_element(By.XPATH, "/html/body/main/div/form/section/a")
+naverLogin.click()
 
-    time.sleep(3)
+time.sleep(3)
 
-    id = dr.find_element_by_xpath("/html/body/div[1]/div[2]/div/div[1]/form/ul/li/div/div[2]/div[1]/input")
-    id.click()
-    id.send_keys("dozos")
+id = dr.find_element_by_xpath("/html/body/div[1]/div[2]/div/div[1]/form/ul/li/div/div[2]/div[1]/input")
+id.click()
+pyperclip.copy("dozos")
+id.send_keys(Keys.CONTROL, 'v')
 
-    time.sleep(3)
+time.sleep(3)
 
-    pw = dr.find_element_by_xpath("/html/body/div[1]/div[2]/div/div[1]/form/ul/li/div/div[2]/div[2]/input")
-    pw.click()
-    pw.send_keys("Dongjin90!@")
+pw = dr.find_element_by_xpath("/html/body/div[1]/div[2]/div/div[1]/form/ul/li/div/div[2]/div[2]/input")
+pw.click()
+pyperclip.copy("Dongjin90!@")
+pw.send_keys(Keys.CONTROL, 'v')
 
-    time.sleep(3)
+time.sleep(3)
 
-    naverLoginButton = dr.find_element_by_xpath("/html/body/div[1]/div[2]/div/div[1]/form/ul/li/div/div[8]/button")
-    naverLoginButton.click()
+naverLoginButton = dr.find_element_by_xpath("/html/body/div[1]/div[2]/div/div[1]/form/ul/li/div/div[8]/button")
+naverLoginButton.click()
 
-    #----
-    new = "https://chimhaha.net/recommend_comics/new"
+#----
+new = "https://chimhaha.net/recommend_comics/new"
 
-    select = Select(dr.find_element_by_xpath("/html/body/main/article/form/div[1]/div[1]/div[2]/select"))
-    select.select_by_value('72')
+dr.get(new)
 
-    time.sleep(1)
+time.sleep(3)
 
-    title = dr.find_element_by_xpath("/html/body/main/article/form/div[2]/input")
-    title.click()
-    title.send_keys(titleText)
+select = Select(dr.find_element_by_xpath("/html/body/main/article/form/div[1]/div[1]/div[2]/select"))
+select.select_by_value('72')
 
-    time.sleep(1)
+time.sleep(1)
 
-    content = dr.find_element_by_xpath("/html/body/main/article/form/div[3]/div/div[1]/div[2]/div/p")
-    content.click()
-    content.send_keys(contentText)
-except:
-    print("error...")
+title = dr.find_element_by_xpath("/html/body/main/article/form/div[2]/input")
+title.click()
+pyperclip.copy(finalTitle)
+title.send_keys(Keys.CONTROL, 'v')
+
+time.sleep(1)
+
+content = dr.find_element_by_xpath("/html/body/main/article/form/div[3]/div/div[1]/div[2]/div/p")
+content.click()
+pyperclip.copy(finalContents)
+content.send_keys(Keys.CONTROL, 'v')
+
+time.sleep(3)
+register = dr.find_element_by_xpath("/html/body/main/article/form/div[5]/button")
+print('등록 클릭')
+#register.click()
+
+time.sleep(10)
+dr.quit()
+#except:
+#    print("error...")
 
