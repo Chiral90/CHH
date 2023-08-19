@@ -79,14 +79,14 @@ time.sleep(3)
 
 id = dr.find_element_by_xpath("/html/body/div[1]/div[2]/div/div[1]/form/ul/li/div/div[2]/div[1]/input")
 id.click()
-pyperclip.copy("dozos")
+pyperclip.copy("")
 id.send_keys(Keys.CONTROL, 'v')
 
 time.sleep(3)
 
 pw = dr.find_element_by_xpath("/html/body/div[1]/div[2]/div/div[1]/form/ul/li/div/div[2]/div[2]/input")
 pw.click()
-pyperclip.copy("Dongjin90!@")
+pyperclip.copy("")
 pw.send_keys(Keys.CONTROL, 'v')
 
 time.sleep(3)
